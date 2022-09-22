@@ -2,3 +2,4 @@ node_modules
 mongodb.txt
 objet-test.js
 users.txt
+.env
