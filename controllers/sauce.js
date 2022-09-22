@@ -1,18 +1,21 @@
 const Sauce = require('../models/Sauce');
 const fs = require('fs');
 
+// Affiche toutes les sauces
 exports.getAllSauces = (req, res, next) => {
   Sauce.find()
     .then(sauces => res.status(200).json(sauces))
     .catch(error => res.status(400).json({ error }));
 };
 
+// Affiche une sauce
 exports.getOneSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then(sauce => res.status(200).json(sauce))
     .catch(error => res.status(404).json({ error }));
 };
 
+// Créé une sauce
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce)
   delete sauceObject._id;
@@ -21,8 +24,8 @@ exports.createSauce = (req, res, next) => {
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     likes: 0,
     dislikes: 0,
-    usersLiked: [' '],
-    usersdisLiked: [' '],
+    usersLiked: [],
+    usersdisLiked: [],
   });
   sauce
     .save()
@@ -30,6 +33,7 @@ exports.createSauce = (req, res, next) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
+// Modifie une sauce
 exports.modifySauce = (req, res, next) => {
   const sauceObject = req.file ? {
       ...JSON.parse(req.body.sauce),
@@ -52,6 +56,7 @@ exports.modifySauce = (req, res, next) => {
       });
 };
 
+// Supprime une sauce
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id})
       .then(sauce => {
@@ -70,3 +75,31 @@ exports.deleteSauce = (req, res, next) => {
           res.status(500).json({ error });
       });
 };
+
+
+// Like/Dislike une sauce
+exports.likeDislikeSauce = (req, res, next) => {
+    let like = req.body.like;
+
+    switch (like) {
+        // user aime la sauce
+        case 1:
+            Sauce.updateOne({ _id: req.params.id }, { $push: { usersLiked: userId }, $inc: {like: +1} })
+                .then(() => res.status(200).json({ message: 'J\'aime !' }))
+                .catch(erro => res.status(400).json({ error }));
+        break;
+
+        // user aime pas la sauce
+        case -1:
+
+        break;
+
+        // user annule son like
+        case 0:
+
+        break;
+
+        default:
+            console.log(error);
+    }
+}

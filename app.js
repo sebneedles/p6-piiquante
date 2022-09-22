@@ -8,7 +8,7 @@ const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
 
-
+// CRYPTER CETTE PARTIE !!
 mongoose.connect('mongodb+srv://sebastien:pansini@clusterhottakes.qtzn2gc.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
