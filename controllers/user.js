@@ -1,13 +1,18 @@
+// import de BCrypt
 const bcrypt = require('bcrypt');
+
+// Import de Json web token
 const jwt = require('jsonwebtoken');
 
+// Import de DotEnv
 const dotenv = require('dotenv');
 const result = dotenv.config();
 
+// Import du modèle Mongoose : User
 const User = require('../models/User');
 
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
+    bcrypt.hash(req.body.password, 10) // hachage de bcrypt et salage du mot de passe 10X 
       .then(hash => {
         const user = new User({
           email: req.body.email,
@@ -36,7 +41,6 @@ exports.signup = (req, res, next) => {
                         token: jwt.sign(
                             { userId: user._id },
                             `${process.env.SECRET_TOKEN}`,
-                            //'RANDOM_TOKEN_SECRET',
                             { expiresIn: `${process.env.EXPIRE_TOKEN}` }
                         )
                     });
