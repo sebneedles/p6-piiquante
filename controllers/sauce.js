@@ -155,8 +155,7 @@ exports.likeDislikeSauce = (req, res, next) => {
             console.log(req.body.userId, 'Annule Je n\'aime pas !');
           }
           break;
-          default: console.log(error);
       }
     })
-    .catch((error) => res.status(404).json({ message: 'Vous ne pouvez pas voter 2x !' }));
+    .catch((error) => res.status(404).json({ error }));
 };
